@@ -3,5 +3,49 @@
     ViewBag.Title = "Usuarios";
 }
 
-<h2>Usuarios</h2>
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item">Resumen</li>
+    <li class="breadcrumb-item active">Usuarios</li>
+</ol>
 
+<div class="card">
+    <div class="card-header"><i class="fas fa-users me-1" ></i> Lista de usuarios</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-success"><i class="fas fa-user-plus"></i> Crear usuario</button>
+            </div>
+        </div>
+        <hr />
+        <table style="width: 100%" id="tbUsuarios" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Activo</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        jQuery.ajax({
+            url: '@Url.Action("ListarUsuarios", "Home")',
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data)
+            }
+        })
+        $(document).ready(function () {
+            $('#tbUsuarios').DataTable();
+        });
+
+    </script>
+}

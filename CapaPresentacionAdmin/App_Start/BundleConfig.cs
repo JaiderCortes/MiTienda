@@ -11,12 +11,12 @@ namespace CapaPresentacionAdmin
             bundles.Add(new Bundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
             bundles.Add(new Bundle("~/bundles/complementos").Include(
-                        "~/Scripts/scripts.js",
                         "~/Scripts/fontawesome/all.min.js",
                         "~/Scripts/DataTables/jquery.dataTables.js",
                         "~/Scripts/DataTables/jquery.dataTables.min.js",
                         "~/Scripts/DataTables/dataTables.responsive.js",
-                        "~/Scripts/DataTables/dataTables.responsive.min.js"
+                        "~/Scripts/DataTables/dataTables.responsive.min.js",
+                        "~/Scripts/scripts.js"
                         ));
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

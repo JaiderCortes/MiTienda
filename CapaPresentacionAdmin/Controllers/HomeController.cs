@@ -23,7 +23,7 @@ namespace CapaPresentacionAdmin.Controllers
         [HttpGet]
         public JsonResult ListarUsuarios()
         {
-            List<Usuario> usuarios = new List<Usuario>();
+            List<Usuario> usuarios;
             usuarios = new CNUsuarios().ListarUsuarios();
             return Json(new { data = usuarios }, JsonRequestBehavior.AllowGet);
         }

@@ -13,7 +13,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#modalCrearUsuario"><i class="fas fa-user-plus"></i> Crear usuario</button>
+                <button class="btn btn-success" type="button" onclick="AbrirModalUsuario(null)"><i class="fas fa-user-plus"></i> Crear usuario</button>
             </div>
         </div>
         <hr />
@@ -33,11 +33,11 @@
     </div>
 </div>
 <!--Modal para la creación de usuario-->
-<div class="modal fade" id="modalCrearUsuario" tabindex="-1" aria-labelledby="modalCrearUsuario" aria-hidden="true">
+<div class="modal fade" id="modalUsuario" tabindex="-1" data-bs-backdrop="static" aria-labelledby="modalUsuario" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h1 class="modal-title fs-5" id="modalCrearUsuario">Crear usuario</h1>
+                <h1 class="modal-title fs-5" id="modalUsuario">Crear usuario</h1>
                 <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body g-2">
@@ -59,7 +59,7 @@
                     <div class="col">
                         <label for="cboActivo" class="form-label">Activo</label>
                         <select id="cboActivo" class="form-select" aria-label="Si" required>
-                            <option selected>Seleccione...</option>
+                            <option selected value="2">Seleccione...</option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
@@ -68,7 +68,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="Guardar()">Guardar</button>
             </div>
         </div>
     </div>
@@ -85,8 +85,9 @@
                 console.log(data)
             }
         })
+        var tbUsuarios;
         $(document).ready(function () {
-            $('#tbUsuarios').DataTable({
+            tbUsuarios = $('#tbUsuarios').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
@@ -111,7 +112,7 @@
                         }
                     },
                     {
-                        "defaultContent": "<button class='btn btn-info btn-sm'><i class='fas fa-user-edit'></i></button>" +
+                        "defaultContent": "<button class='btn btn-info btn-sm btn-editar'><i class='fas fa-user-edit'></i></button>" +
                             "<button class='btn btn-danger btn-sm ms-2'><i class='fas fa-user-times'></i></button>",
                         "orderable": false,
                         "searchable": false,
@@ -121,6 +122,38 @@
             });
         });
 
+        function AbrirModalUsuario(json) {
+            //Limpiar los campos al cargar el modal
+            $("#txtNombres").val("")
+            $("#txtApellidos").val("")
+            $("#txtCorreo").val("")
+            $("#cboActivo").val(2)
+
+            //Si el parametro no llega null quiere decir que viene información y esta información la ponemos en cada campo
+            if (json != null) {
+                $("#txtNombres").val(json.Nombres)
+                $("#txtApellidos").val(json.Apellidos)
+                $("#txtCorreo").val(json.Correo)
+                $("#cboActivo").val(json.Activo == true ? 1 : 0)
+                var idUsuario = json.Id
+                console.log(idUsuario)
+            }
+
+            $("#modalUsuario").modal("show");
+        }
+
+        $("#tbUsuarios tbody").on("click", ".btn-editar", function () {
+            var fila = $(this).closest("tr"); //Almacena la fila a la que pertenece el boton que se oprime
+            //Obtener los datos de las columnas para esta fila
+            var datos = tbUsuarios.row(fila).data();
+
+            AbrirModalUsuario(datos)
+        });
+
+        //TODO: Crear método para guardar al hacer clic en el boton "Guardar" de la modal
+        function Guardar() {
+
+        }
 
     </script>
 }

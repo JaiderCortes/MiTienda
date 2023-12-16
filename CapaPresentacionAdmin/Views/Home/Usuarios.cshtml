@@ -13,7 +13,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-success"><i class="fas fa-user-plus"></i> Crear usuario</button>
+                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#modalCrearUsuario"><i class="fas fa-user-plus"></i> Crear usuario</button>
             </div>
         </div>
         <hr />
@@ -30,6 +30,47 @@
             <tbody>
             </tbody>
         </table>
+    </div>
+</div>
+<!--Modal para la creación de usuario-->
+<div class="modal fade" id="modalCrearUsuario" tabindex="-1" aria-labelledby="modalCrearUsuario" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h1 class="modal-title fs-5" id="modalCrearUsuario">Crear usuario</h1>
+                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body g-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="txtNombres" class="form-label">Nombres</label>
+                        <input id="txtNombres" type="text" class="form-control" placeholder="Digite..." aria-label="Nombres" required>
+                    </div>
+                    <div class="col">
+                        <label for="txtApellidos" class="form-label">Apellidos</label>
+                        <input id="txtApellidos" type="text" class="form-control" placeholder="Digite..." aria-label="Apellidos" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="txtCorreo" class="form-label">Correo</label>
+                        <input id="txtCorreo" type="email" class="form-control" placeholder="Digite..." aria-label="Correo" required>
+                    </div>
+                    <div class="col">
+                        <label for="cboActivo" class="form-label">Activo</label>
+                        <select id="cboActivo" class="form-select" aria-label="Si" required>
+                            <option selected>Seleccione...</option>
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -79,6 +120,7 @@
                 ]
             });
         });
+
 
     </script>
 }

@@ -41,6 +41,7 @@
                 <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body g-2">
+                <input id="txtId" type="hidden" value="0">
                 <div class="row">
                     <div class="col">
                         <label for="txtNombres" class="form-label">Nombres</label>
@@ -86,6 +87,7 @@
             }
         })
         var tbUsuarios;
+        var filaSeleccionada;
         $(document).ready(function () {
             tbUsuarios = $('#tbUsuarios').DataTable({
                 "language": {
@@ -124,6 +126,7 @@
 
         function AbrirModalUsuario(json) {
             //Limpiar los campos al cargar el modal
+            $("#txtId").val(0),
             $("#txtNombres").val("")
             $("#txtApellidos").val("")
             $("#txtCorreo").val("")
@@ -131,28 +134,42 @@
 
             //Si el parametro no llega null quiere decir que viene información y esta información la ponemos en cada campo
             if (json != null) {
+                $("#txtId").val(json.Id)
                 $("#txtNombres").val(json.Nombres)
                 $("#txtApellidos").val(json.Apellidos)
                 $("#txtCorreo").val(json.Correo)
                 $("#cboActivo").val(json.Activo == true ? 1 : 0)
-                var idUsuario = json.Id
-                console.log(idUsuario)
+                console.log(json)
             }
 
             $("#modalUsuario").modal("show");
         }
 
         $("#tbUsuarios tbody").on("click", ".btn-editar", function () {
-            var fila = $(this).closest("tr"); //Almacena la fila a la que pertenece el boton que se oprime
+            filaSeleccionada = $(this).closest("tr"); //Almacena la fila a la que pertenece el boton que se oprime
             //Obtener los datos de las columnas para esta fila
-            var datos = tbUsuarios.row(fila).data();
+            var datos = tbUsuarios.row(filaSeleccionada).data();
 
             AbrirModalUsuario(datos)
         });
 
         //TODO: Crear método para guardar al hacer clic en el boton "Guardar" de la modal
         function Guardar() {
+            var usuario = {
 
+                Id: $("#txtId").val(),
+                Nombres: $("#txtNombres").val(),
+                Apellidos: $("#txtApellidos").val(),
+                Correo: $("#txtCorreo").val(),
+                Clave: "",
+                Activo: $("#cboActivo").val() == 1 ? true : false,
+            }
+            if (usuario.Id == 0) {
+                tbUsuarios.row.add(usuario).draw(false)
+            } else {
+                tbUsuarios.row(filaSeleccionada).data(usuario).draw(false)
+            }
+            $("#modalUsuario").modal("hide");
         }
 
     </script>

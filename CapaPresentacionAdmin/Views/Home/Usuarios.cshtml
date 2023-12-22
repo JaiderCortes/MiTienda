@@ -33,7 +33,7 @@
     </div>
 </div>
 <!--Modal para la creación de usuario-->
-<div class="modal fade" id="modalUsuario" tabindex="-1" data-bs-backdrop="static" aria-labelledby="modalUsuario" aria-hidden="true">
+<div class="modal fade" id="modalUsuario" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalUsuario" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
@@ -60,16 +60,22 @@
                     <div class="col">
                         <label for="cboActivo" class="form-label">Activo</label>
                         <select id="cboActivo" class="form-select" aria-label="Si" required>
-                            <option selected value="2">Seleccione...</option>
-                            <option value="1">Si</option>
+                            <option selected value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
                 </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <div id="msjError" class="alert alert-danger" role="alert">
+                            <i class="fas fa-times-circle"></i> A simple danger alert—check it out!
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-success" onclick="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -130,7 +136,10 @@
             $("#txtNombres").val("")
             $("#txtApellidos").val("")
             $("#txtCorreo").val("")
-            $("#cboActivo").val(2)
+            $("#cboActivo").val(1)
+
+            //Ocultar div de mensaje de error
+            $("#msjError").hide();
 
             //Si el parametro no llega null quiere decir que viene información y esta información la ponemos en cada campo
             if (json != null) {
@@ -164,12 +173,44 @@
                 Clave: "",
                 Activo: $("#cboActivo").val() == 1 ? true : false,
             }
-            if (usuario.Id == 0) {
-                tbUsuarios.row.add(usuario).draw(false)
-            } else {
-                tbUsuarios.row(filaSeleccionada).data(usuario).draw(false)
-            }
-            $("#modalUsuario").modal("hide");
+
+            jQuery.ajax({
+                url: '@Url.Action("GuardarUsuario", "Home")',
+                type: 'POST',
+                data: JSON.stringify({ usuario: usuario }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //Nuevo usuario
+                    if (usuario.Id == 0) {
+                        if (data.result != null) {
+                            usuario.Id = data.result;
+                            tbUsuarios.row.add(usuario).draw(false)
+                            $("#modalUsuario").modal("hide");
+                        } else {
+                            $("#msjError").text(data.mensaje);
+                            $("#msjError").show();
+                        }
+                    }
+                    //Editar usuario
+                    else {
+                        if (data.result) {
+                            tbUsuarios.row(filaSeleccionada).data(usuario).draw(false)
+                            filaSeleccionada = null
+                            $("#modalUsuario").modal("hide");
+                        } else {
+                            $("#msjError").text(data.mensaje);
+                            $("#msjError").show();
+                        }
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                beforeSend: function () {
+
+                }
+            })
         }
 
     </script>

@@ -16,6 +16,7 @@ namespace CapaPresentacionAdmin
                         "~/Scripts/DataTables/jquery.dataTables.min.js",
                         "~/Scripts/DataTables/dataTables.responsive.js",
                         "~/Scripts/DataTables/dataTables.responsive.min.js",
+                        "~/Scripts/loadingoverlay/loadingoverlay.min.js",
                         "~/Scripts/scripts.js"
                         ));
 

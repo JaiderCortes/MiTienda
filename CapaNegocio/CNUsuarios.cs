@@ -34,9 +34,24 @@ namespace CapaNegocio
 
             if (string.IsNullOrEmpty(Mensaje))
             {
-                string clave = "test123";
-                obj.Clave = CNRecursos.EncriptarSha256(clave);
-                return cdu.Registrar(obj, out Mensaje);
+                //Envío del correo con la contraseña del nuevo usuario
+                string clave = CNRecursos.GenerarClave();
+                string asunto = "Activación de cuenta - Mi Tienda";
+                string mensaje = "<h3>¡Su cuenta ha sido creada exitosamente!</h3><br>" +
+                    "<p>Bienvenido al sistema Mi Tienda.</p><br>" +
+                    $"<h4>Su contraseña para acceder al sistema es: {clave}</h4>";
+                bool respuesta = CNRecursos.EnviarCorreo(obj.Correo, asunto, mensaje);
+                if (respuesta)
+                {
+                    obj.Clave = CNRecursos.EncriptarSha256(clave);
+                    return cdu.Registrar(obj, out Mensaje);
+                }
+                else
+                {
+                    Mensaje = "No se pudo enviar el correo";
+                    return null;
+                }
+
             }
             else
             {

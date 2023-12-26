@@ -146,9 +146,6 @@ namespace CapaDatos
 
                     con.Open();
                     resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-                    resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
-                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
                 }
             }
             catch (Exception e)

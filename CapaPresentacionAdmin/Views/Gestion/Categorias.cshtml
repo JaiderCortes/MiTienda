@@ -1,7 +1,246 @@
 ﻿
 @{
-    ViewBag.Title = "Categorias";
+    ViewBag.Title = "Categorías";
 }
 
-<h2>Categorias</h2>
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item">Gestión</li>
+    <li class="breadcrumb-item active">Categorías</li>
+</ol>
 
+<div class="card">
+    <div class="card-header"><i class="fas fa-solid fa-layer-group"></i> Lista de categorías</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-success" type="button" onclick="AbrirModalCategoria(null)"><i class="fas fa-solid fa-layer-group"></i> Crear categoría</button>
+            </div>
+        </div>
+        <hr />
+        <table style="width: 100%" id="tbCategorias" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Activo</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--Modal para la creación de categoria-->
+<div class="modal fade" id="modalCategoria" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalCategoria" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h1 class="modal-title fs-5" id="modalCategoria">Crear categoría</h1>
+                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body g-2">
+                <input id="txtId" type="hidden" value="0">
+                <div class="row">
+                    <div class="col">
+                        <label for="txtDescripcion" class="form-label">Descripcion</label>
+                        <input id="txtDescripcion" type="text" class="form-control" placeholder="Digite..." aria-label="Descripcion" required>
+                    </div>
+                    <div class="col">
+                        <label for="cboActivo" class="form-label">Activo</label>
+                        <select id="cboActivo" class="form-select" aria-label="Si" required>
+                            <option selected value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <div id="msjError" class="alert alert-danger" role="alert">
+                            <i class="fas fa-times-circle"></i> A simple danger alert—check it out!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        jQuery.ajax({
+            url: '@Url.Action("ListarCategorias", "Gestion")',
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data)
+            }
+        })
+        var tbCategorias;
+        var filaSeleccionada;
+        $(document).ready(function () {
+            tbCategorias = $('#tbCategorias').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                },
+                responsive: true,
+                "ajax": {
+                    url: '@Url.Action("ListarCategorias", "Gestion")',
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [
+                    {"data": "Descripcion"},
+                    {
+                        "data": "Activo",
+                        "render": function (valor) {
+                            if (valor) {
+                                return "<span class='badge bg-success'>Si</span>"
+                            } else {
+                                return "<span class='badge bg-danger'>No</span>"
+                            }
+                        }
+                    },
+                    {
+                        "defaultContent": "<button class='btn btn-info btn-sm btn-editar'><i class='fas fa-pen'></i></button>" +
+                            "<button class='btn btn-danger btn-sm ms-2 btn-eliminar'><i class='fas fa-trash'></i></button>",
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "65px"
+                    }
+                ]
+            });
+        });
+
+        function AbrirModalCategoria(json) {
+            //Limpiar los campos al cargar el modal
+            $("#txtId").val(0),
+            $("#txtDescripcion").val("")
+            $("#cboActivo").val(1)
+
+            //Ocultar div de mensaje de error
+            $("#msjError").hide();
+
+            //Si el parametro no llega null quiere decir que viene información y esta información la ponemos en cada campo
+            if (json != null) {
+                $("#txtId").val(json.Id)
+                $("#txtDescripcion").val(json.Descripcion)
+                $("#cboActivo").val(json.Activo == true ? 1 : 0)
+                //console.log(json)
+            }
+
+            $("#modalCategoria").modal("show");
+        }
+
+        $("#tbCategorias tbody").on("click", ".btn-editar", function () {
+            filaSeleccionada = $(this).closest("tr"); //Almacena la fila a la que pertenece el boton que se oprime
+            //Obtener los datos de las columnas para esta fila
+            var datos = tbCategorias.row(filaSeleccionada).data();
+
+            AbrirModalCategoria(datos)
+        });
+
+        function Guardar() {
+            var categoria = {
+
+                Id: $("#txtId").val(),
+                Descripcion: $("#txtDescripcion").val(),
+                Activo: $("#cboActivo").val() == 1 ? true : false,
+            }
+
+            jQuery.ajax({
+                url: '@Url.Action("GuardarCategoria", "Gestion")',
+                type: 'POST',
+                data: JSON.stringify({ categoria: categoria }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    //Nueva categoria
+                    if (categoria.Id == 0) {
+                        if (data.result != null) {
+                            categoria.Id = data.result;
+                            tbCategorias.row.add(categoria).draw(false)
+                            $("#modalCategoria").modal("hide");
+                        } else {
+                            $("#msjError").text(data.mensaje);
+                            $("#msjError").show();
+                        }
+                    }
+                    //Editar categoria
+                    else {
+                        if (data.result) {
+                            tbCategorias.row(filaSeleccionada).data(categoria).draw(false)
+                            filaSeleccionada = null
+                            $("#modalCategoria").modal("hide");
+                        } else {
+                            $("#msjError").text(data.mensaje);
+                            $("#msjError").show();
+                        }
+                    }
+                },
+                error: function (error) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    $("#msjError").text("Error durante la ejecución.");
+                    $("#msjError").show();
+                },
+                beforeSend: function () {
+                    $(".modal-body").LoadingOverlay("show", {
+                        imageResizeFactor: 2,
+                        text: "Cargando...",
+                        size: 14
+                    })
+                }
+            })
+        }
+
+        $("#tbCategorias tbody").on("click", ".btn-eliminar", function () {
+            var categoriaSeleccionada = $(this).closest("tr");
+
+            var datos = tbCategorias.row(categoriaSeleccionada).data();
+
+            swal({
+                title: "¿Desea eliminar esta categoria?",
+                text: "Esta operación es irreversible.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Eliminar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        jQuery.ajax({
+                            url: '@Url.Action("EliminarCategoria", "Gestion")',
+                            type: 'POST',
+                            data: JSON.stringify({ idCategoria: datos.Id }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                if (data.result) {
+                                    tbCategorias.row(categoriaSeleccionada).remove().draw();
+                                } else {
+                                    swal("No se pudo eliminar", data.mensaje, "error");
+                                }
+                            },
+                            error: function (error) {
+                                console.log(error)
+                            }
+                        })
+                        swal("Categoría eliminada", "Se ha eliminado la categoria correctamente.", "success");
+                    } else {
+                        swal("Cancelado", "Operación cancelada", "error");
+                    }
+                });
+
+            console.log(datos);
+        });
+
+    </script>
+}

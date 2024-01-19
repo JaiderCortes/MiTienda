@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
 using System.IO;
+using System.Net.NetworkInformation;
 
 namespace CapaNegocio
 {
@@ -66,6 +67,26 @@ namespace CapaNegocio
                 throw;
             }
             return resultado;
+        }
+
+        public static string ConvertirBase64(string ruta, out bool resultado)
+        {
+            string textoBase64 = string.Empty;
+            resultado = true;
+
+            try
+            {
+                byte[] bytes = File.ReadAllBytes(ruta);
+                textoBase64 = Convert.ToBase64String(bytes);
+            }
+            catch (Exception e)
+            {
+                resultado = false;
+                Console.WriteLine($"Ocurrió un error durante la ejecución del procedimiento: {e.Message}");
+                throw;
+            }
+
+            return textoBase64;
         }
     }
 }

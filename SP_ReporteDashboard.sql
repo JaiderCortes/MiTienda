@@ -1,0 +1,9 @@
+CREATE PROCEDURE SP_ReporteDashboard AS
+BEGIN
+
+	SELECT
+	(SELECT COUNT(*) FROM CLIENTE) AS CantidadClientes,
+	(SELECT ISNULL(SUM(Cantidad), 0) FROM DETALLE_VENTA) AS CantidadVentas,
+	(SELECT COUNT(*) FROM PRODUCTO) AS CantidadProductos
+
+END

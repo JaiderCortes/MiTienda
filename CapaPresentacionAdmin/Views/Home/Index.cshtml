@@ -61,7 +61,7 @@
         Historial de ventas
     </div>
     <div class="card-body">
-        <form>
+        <form action="@Url.Action("ExportarVentas", "Home")" method="post">
             <div class="row align-items-end">
                 <div class="col-sm-2">
                     <div class="mb-2">
@@ -118,7 +118,24 @@
 
 @section Scripts{
     <script>
-        debugger;
+        $("#txtFechaInicio").datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "drop",
+            dateFormat: "dd/mm/yy",
+        }).datepicker("setDate", new Date());
+
+        $("#txtFechaFin").datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "drop",
+            dateFormat: "dd/mm/yy"
+        }).datepicker("setDate", new Date());
+
         jQuery.ajax({
             url: '@Url.Action("VerDashboard", "Home")',
             type: "GET",
@@ -132,5 +149,42 @@
                 $("#totalProductos").text(dashboard.CantidadProductos);
             }
         })
+
+        var url = '@Url.Action("ListaReporte", "Home")' +
+            '?fechaInicio=' + $("#txtFechaInicio").val() +
+            '&fechaFin=' + $("#txtFechaFin").val() +
+            '&idTransaccion=' + $("#txtIdTransaccion").val()
+
+        var tbVentas
+        tbVentas = $('#tbVentas').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            responsive: true,
+            "ajax": {
+                url: url,
+                type: "GET",
+                dataType: "json"
+            },
+            "columns": [
+                {"data": "FechaVenta"},
+                {"data": "Cliente"},
+                {"data": "Producto"},
+                {"data": "Precio"},
+                {"data": "Cantidad"},
+                {"data": "Total"},
+                {"data": "IdTransaccion"}
+            ]
+        });
+
+        $("#btnBuscar").on("click", () => {
+            var urlFiltrada = '@Url.Action("ListaReporte", "Home")' +
+                '?fechaInicio=' + $("#txtFechaInicio").val() +
+                '&fechaFin=' + $("#txtFechaFin").val() +
+                '&idTransaccion=' + $("#txtIdTransaccion").val()
+
+            tbVentas.ajax.url(urlFiltrada).load();
+        })
+
     </script>
 }

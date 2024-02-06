@@ -167,8 +167,8 @@ namespace CapaPresentacionAdmin.Controllers
                 //string rutaFisica = Server.MapPath("~/Imagenes/");
                 if(imagen != null)
                 {
-                    //TODO: Terminar de revisar las rutas y probar el ingreso de datos vacxíos. Jaider 07/01/2024
-                    string rutaImagen = ConfigurationManager.AppSettings["ServidorFotos"];
+                    //string rutaImagen = ConfigurationManager.AppSettings["ServidorFotos"];
+                    string rutaImagen = Server.MapPath(ConfigurationManager.AppSettings["ServidorFotos"]);
                     //string rutaImagen = rutaFisica; //Pruebas
                     string extensionImagen = Path.GetExtension(imagen.FileName);
                     string nombreImagen = string.Concat(producto.Id.ToString(), extensionImagen);

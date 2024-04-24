@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CapaDatos;
@@ -48,7 +49,7 @@ namespace CapaNegocio
                 }
                 else
                 {
-                    Mensaje = "No se pudo enviar el correo";
+                    Mensaje = "No se pudo enviar el correo.";
                     return null;
                 }
 
@@ -89,5 +90,43 @@ namespace CapaNegocio
         {
             return cdu.Eliminar(id, out Mensaje);
         }
+
+        public bool CambiarClave(Guid id, string nuevaClave, out string Mensaje)
+        {
+            return cdu.CambiarClave(id, nuevaClave, out Mensaje);
+        }
+
+        public bool ReestablecerClave(Guid idUsuario, string correoUsuario, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+            string nuevaClave = CNRecursos.GenerarClave();
+            bool resultado = cdu.ReestablecerClave(idUsuario, CNRecursos.EncriptarSha256(nuevaClave), out Mensaje);
+
+            if (resultado)
+            {
+                //Envío del correo con la nueva contraseña del usuario
+                string asunto = "Reestablecimiento de contraseña - Mi Tienda";
+                string mensaje = "<h3>Usted acaba de recibir este correo porque ha solicitado el reestablecimiento de su contraseña.</h3><br>" +
+                    "<p>A continuación enviamos su nueva contraseña para acceder al sistema.</p><br>" +
+                    $"<h4>Nueva contraseña: {nuevaClave}</h4>";
+                bool respuesta = CNRecursos.EnviarCorreo(correoUsuario, asunto, mensaje);
+
+                if (respuesta)
+                {
+                    return true;
+                }
+                else
+                {
+                    Mensaje = "No se pudo enviar el correo.";
+                    return false;
+                }
+            }
+            else
+            {
+                Mensaje = "No se pudo reestablecer la contraseña.";
+                return false;
+            }
+        }
+
     }
 }

@@ -158,5 +158,61 @@ namespace CapaDatos
             return resultado;
         }
 
+        public bool CambiarClave(Guid idUsuario, string nuevaClave, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+            try
+            {
+                SqlConnection con = new SqlConnection(Conexion.conexion);
+                using (con)
+                {
+                    SqlCommand cmd = new SqlCommand("UPDATE USUARIO SET Clave = @NuevaClave, Reestablecer = 0 WHERE Id = @IdUsuario;", con);
+                    cmd.Parameters.AddWithValue("@NuevaClave", nuevaClave);
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
+                }
+            }
+            catch (Exception e)
+            {
+                resultado = false;
+                Mensaje = e.Message;
+                Console.WriteLine($"Ocurrió un error durante la ejecución del procedimiento: {e.Message}");
+                throw;
+            }
+            return resultado;
+        }
+
+        public bool ReestablecerClave(Guid idUsuario, string clave, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+            try
+            {
+                SqlConnection con = new SqlConnection(Conexion.conexion);
+                using (con)
+                {
+                    SqlCommand cmd = new SqlCommand("UPDATE USUARIO SET Clave = @Clave, Reestablecer = 1 WHERE Id = @IdUsuario;", con);
+                    cmd.Parameters.AddWithValue("@Clave", clave);
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
+                }
+            }
+            catch (Exception e)
+            {
+                resultado = false;
+                Mensaje = e.Message;
+                Console.WriteLine($"Ocurrió un error durante la ejecución del procedimiento: {e.Message}");
+                throw;
+            }
+            return resultado;
+        }
+
     }
 }

@@ -31,8 +31,6 @@ namespace CapaPresentacionAdmin.Controllers
         [HttpPost]
         public ActionResult Index(string correo, string clave)
         {
-            List<Usuario> usuarios = new List<Usuario>();
-            usuarios = new CNUsuarios().ListarUsuarios();
             Usuario usuario = new Usuario();
             string claveDecrypt = CNRecursos.EncriptarSha256(clave);
             usuario = new CNUsuarios().ListarUsuarios().Where(u => u.Correo == correo && u.Clave == claveDecrypt).FirstOrDefault();
@@ -42,10 +40,63 @@ namespace CapaPresentacionAdmin.Controllers
                 ViewBag.Error = "Usuario o contraseña incorrectos.";
                 return View();
             }
+            else if(usuario.Activo == false){
+                ViewBag.Error = "Usuario inactivo en el sistema.";
+                return View();
+            }
             else
             {
+                if (usuario.Reestablecer == true)
+                {
+                    TempData["IdUsuario"] = usuario.Id;
+                    TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
+                    return RedirectToAction("CambiarClave");
+                }
                 ViewBag.Error = null;
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CambiarClave(string idUsuario, string claveActual, string nuevaClave, string confirmNuevClav)
+        {
+            Usuario usuario = new Usuario();
+            usuario = new CNUsuarios().ListarUsuarios().Where(u => u.Id == Guid.Parse(idUsuario)).FirstOrDefault();
+
+            if (usuario.Clave != CNRecursos.EncriptarSha256(claveActual))
+            {
+                TempData["IdUsuario"] = idUsuario;
+                TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
+                ViewData["ClaveActual"] = "";
+                ViewBag.Error = "La contraseña actual no es correcta.";
+                return View();
+            }else if (nuevaClave != confirmNuevClav)
+            {
+                TempData["IdUsuario"] = idUsuario;
+                TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
+                ViewData["ClaveActual"] = claveActual;
+                ViewBag.Error = "Las contraseñas no coinciden.";
+                return View();
+            }
+            ViewData["ClaveActual"] = "";
+
+            nuevaClave = CNRecursos.EncriptarSha256(nuevaClave);
+            string mensaje = string.Empty;
+
+            bool respuesta = new CNUsuarios().CambiarClave(Guid.Parse(idUsuario), nuevaClave, out mensaje);
+
+            if (respuesta)
+            {
+                TempData["Respuesta"] = "Contraseña actualizada. Por favor, inicie sesión nuevamente.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["IdUsuario"] = idUsuario;
+                TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
+                ViewBag.Error = mensaje;
+                ViewBag.Respuesta = null;
+                return View();
             }
         }
     }

@@ -301,7 +301,7 @@
             filaSeleccionada = $(this).closest("tr"); //Almacena la fila a la que pertenece el boton que se oprime
             //Obtener los datos de las columnas para esta fila
             var datos = tbProducto.row(filaSeleccionada).data();
-            console.log(datos)
+            //console.log(datos)
 
             AbrirModalProducto(datos)
         });
@@ -353,6 +353,7 @@
                             producto.Id = data.idGenerado;
                             tbProducto.row.add(producto).draw(false)
                             $("#modalProducto").modal("hide");
+                            swal("Producto creado", "Producto creado exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();
@@ -364,6 +365,7 @@
                             tbProducto.row(filaSeleccionada).data(producto).draw(false)
                             filaSeleccionada = null
                             $("#modalProducto").modal("hide");
+                            swal("Producto actualizado", "Producto actualizado exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();
@@ -425,7 +427,7 @@
                     }
                 });
 
-            console.log(datos);
+            //console.log(datos);
         });
 
     </script>

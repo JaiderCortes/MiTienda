@@ -30,9 +30,27 @@
                                             <input class="form-control" id="clave" name="clave" type="password" placeholder="Password" required />
                                             <label for="inputPassword">Contraseña</label>
                                         </div>
+                                        @{
+                                            if (ViewBag.Error != null)
+                                            {
+                                                <div class="form-floating mb-3">
+                                                    <div class="alert alert-danger" role="alert">
+                                                        @ViewBag.Error
+                                                    </div>
+                                                </div>
+                                            }
+                                            if (TempData["Respuesta"] != null)
+                                            {
+                                                <div class="form-floating mb-3">
+                                                    <div class="alert alert-success" role="alert">
+                                                        @TempData["Respuesta"]
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a class="small" href="">¿Olvidaste tu contraseña?</a>
-                                            <button class="btn btn-primary" href="" type="submit">Ingresar</button>
+                                            <button class="btn btn-primary" type="submit">Ingresar</button>
                                         </div>
                                     </form>
                                 </div>

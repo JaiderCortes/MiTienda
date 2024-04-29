@@ -39,7 +39,17 @@ namespace CapaPresentacionAdmin.Controllers
 
             if (usuario.Id == Guid.Empty)
             {
-                result = new CNUsuarios().Registrar(usuario, out mensaje);
+                Usuario usuarioExistente = new Usuario();
+                usuarioExistente = new CNUsuarios().ListarUsuarios().Where(u => u.Correo == usuario.Correo).FirstOrDefault();
+                if (usuarioExistente != null)
+                {
+                    result = null;
+                    mensaje = "Usuario existente";
+                }
+                else
+                {
+                    result = new CNUsuarios().Registrar(usuario, out mensaje);
+                }
             }
             else
             {

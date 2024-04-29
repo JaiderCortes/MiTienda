@@ -24,11 +24,11 @@ namespace CapaNegocio
         public static string EncriptarSha256(string input)
         {
             StringBuilder sb = new StringBuilder();
-            using(SHA256 sha256 = SHA256Managed.Create())
+            using (SHA256 sha256 = SHA256Managed.Create())
             {
                 Encoding encoding = Encoding.UTF8;
                 byte[] result = sha256.ComputeHash(encoding.GetBytes(input));
-                foreach(byte b in result)
+                foreach (byte b in result)
                 {
                     sb.Append(b.ToString("x2"));
                 }
@@ -76,8 +76,15 @@ namespace CapaNegocio
 
             try
             {
-                byte[] bytes = File.ReadAllBytes(ruta);
-                textoBase64 = Convert.ToBase64String(bytes);
+                if (ruta != "")
+                {
+                    byte[] bytes = File.ReadAllBytes(ruta);
+                    textoBase64 = Convert.ToBase64String(bytes);
+                }
+                else
+                {
+                    resultado = false;
+                }
             }
             catch (Exception e)
             {

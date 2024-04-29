@@ -166,6 +166,7 @@
                             marca.Id = data.result;
                             tbMarcas.row.add(marca).draw(false)
                             $("#modalMarca").modal("hide");
+                            swal("Marca creada", "Marca creada exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();
@@ -177,6 +178,7 @@
                             tbMarcas.row(filaSeleccionada).data(marca).draw(false)
                             filaSeleccionada = null
                             $("#modalMarca").modal("hide");
+                            swal("Marca actualizada", "Marca actualizada exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();

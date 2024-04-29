@@ -166,6 +166,7 @@
                             categoria.Id = data.result;
                             tbCategorias.row.add(categoria).draw(false)
                             $("#modalCategoria").modal("hide");
+                            swal("Categoría creada", "Categoría creada exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();
@@ -177,6 +178,7 @@
                             tbCategorias.row(filaSeleccionada).data(categoria).draw(false)
                             filaSeleccionada = null
                             $("#modalCategoria").modal("hide");
+                            swal("Categoría actualizada", "Categoría actualizada exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();

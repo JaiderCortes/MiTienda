@@ -187,7 +187,12 @@
                             usuario.Id = data.result;
                             tbUsuarios.row.add(usuario).draw(false)
                             $("#modalUsuario").modal("hide");
-                        } else {
+                            swal("Usuario creado", "Usuario creado exitosamente. Se ha enviado la contraseña de acceso al correo registrado.", "success");
+                        } else if (data.result == null && data.mensaje == "Usuario existente") {
+                            $("#modalUsuario").modal("hide");
+                            swal("Atención", "Ya existe un usuario con el correo digitado.", "warning");
+                        }
+                        else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();
                         }
@@ -198,6 +203,7 @@
                             tbUsuarios.row(filaSeleccionada).data(usuario).draw(false)
                             filaSeleccionada = null
                             $("#modalUsuario").modal("hide");
+                            swal("Usuario actualizado", "Usuario actualizado exitosamente.", "success");
                         } else {
                             $("#msjError").text(data.mensaje);
                             $("#msjError").show();

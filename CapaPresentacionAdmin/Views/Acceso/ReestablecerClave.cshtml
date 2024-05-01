@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Inicio de sesión - Mi tienda</title>
+    <title>Reestablecimiento de contraseña - Mi tienda</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body class="bg-primary">
@@ -19,16 +19,13 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Inicio de sesión</h3></div>
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Reestablecimiento de contraseña</h3></div>
                                 <div class="card-body">
-                                    <form action="@Url.Action("Index", "Acceso")" method="post">
+                                    <div class="small mb-3 text-muted">Ingrese su correo electrónico y se le generará y enviará una nueva contraseña de acceso.</div>
+                                    <form action="@Url.Action("ReestablecerClave", "Acceso")" method="post">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="correo" name="correo" type="email" placeholder="name@example.com" required />
                                             <label for="inputEmail">Correo</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" id="clave" name="clave" type="password" placeholder="Password" required />
-                                            <label for="inputPassword">Contraseña</label>
                                         </div>
                                         @{
                                             if (ViewBag.Error != null)
@@ -39,20 +36,18 @@
                                                     </div>
                                                 </div>
                                             }
-                                            if (TempData["Respuesta"] != null)
-                                            {
-                                                <div class="form-floating mb-3">
-                                                    <div class="alert alert-success" role="alert">
-                                                        @TempData["Respuesta"]
-                                                    </div>
-                                                </div>
-                                            }
                                         }
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="@Url.Action("ReestablecerClave", "Acceso")">¿Olvidaste tu contraseña?</a>
-                                            <button class="btn btn-primary" type="submit">Ingresar</button>
+                                        <div class="mt-4 mb-0">
+                                            <div class="d-grid">
+                                                <button class="btn btn-primary" type="submit">Solicitar nueva contraseña</button>
+                                            </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small">
+                                        <a href="@Url.Action("Index", "Acceso")">Regresar al inicio de sesión</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

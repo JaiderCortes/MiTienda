@@ -40,7 +40,8 @@ namespace CapaPresentacionAdmin.Controllers
                 ViewBag.Error = "Usuario o contraseña incorrectos.";
                 return View();
             }
-            else if(usuario.Activo == false){
+            else if (usuario.Activo == false)
+            {
                 ViewBag.Error = "Usuario inactivo en el sistema.";
                 return View();
             }
@@ -70,7 +71,8 @@ namespace CapaPresentacionAdmin.Controllers
                 ViewData["ClaveActual"] = "";
                 ViewBag.Error = "La contraseña actual no es correcta.";
                 return View();
-            }else if (nuevaClave != confirmNuevClav)
+            }
+            else if (nuevaClave != confirmNuevClav)
             {
                 TempData["IdUsuario"] = idUsuario;
                 TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
@@ -96,6 +98,32 @@ namespace CapaPresentacionAdmin.Controllers
                 TempData["NombreUsuario"] = usuario.Nombres + " " + usuario.Apellidos;
                 ViewBag.Error = mensaje;
                 ViewBag.Respuesta = null;
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ReestablecerClave(string correo)
+        {
+            Usuario usuario = new Usuario();
+            usuario = new CNUsuarios().ListarUsuarios().Where(user => user.Correo == correo).FirstOrDefault();
+
+            if (usuario == null)
+            {
+                ViewBag.Error = "No se encontró ningún usuario con el correo indicado.";
+                return View();
+            }
+
+            string mensaje = string.Empty;
+            bool respuesta = new CNUsuarios().ReestablecerClave(usuario.Id, correo, out mensaje);
+            if (respuesta)
+            {
+                TempData["Respuesta"] = "Se acaba de enviar su nueva contraseña de acceso al correo indicado. Puede iniciar sesión nuevamente con esta.";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Error = mensaje;
                 return View();
             }
         }

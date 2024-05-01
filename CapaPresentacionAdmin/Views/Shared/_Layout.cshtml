@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.css" integrity="sha512-KdxWQx+7q6Vn9y/vKlJa3GysrGTcs8O3SAvVVGhpU2iB/LvlrZWe+6bl9+BM0eEJVI/dUlcskM5jYbz7b5hGMA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css" integrity="sha512-9h7XRlUeUwcHUf9bNiWSTO9ovOWFELxTlViP801e5BbwNJ5ir9ua6L20tEroWZdm+HFBAWBLx2qH4l4QHHlRyg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body class="sb-nav-fixed" onload="CargaPagina()">
+<body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="@Url.Action("Index", "Home")">Mi tienda online 🛒</a>
@@ -48,7 +48,7 @@
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="#!">Cerrar sesión</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar sesión</a></li>
                 </ul>
             </li>
         </ul>

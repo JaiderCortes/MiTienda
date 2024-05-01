@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace CapaPresentacionAdmin.Controllers
 {
+    [Authorize]
     public class GestionController : Controller
     {
         // GET: Gestion

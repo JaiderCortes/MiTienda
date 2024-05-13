@@ -57,6 +57,7 @@ namespace CapaPresentacionAdmin.Controllers
 
                 FormsAuthentication.SetAuthCookie(usuario.Correo, false);
                 ViewBag.Error = null;
+                Session["Usuario"] = usuario.Nombres + " " + usuario.Apellidos;
                 return RedirectToAction("Index", "Home");
             }
         }

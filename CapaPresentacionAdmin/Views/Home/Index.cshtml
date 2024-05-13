@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-xl-3 col-md-6">
         <div class="card bg-success text-white mb-4">
-            <div class="card-body">
+            <div class="card-body" id="clientes">
                 <div class="row">
                     <div class="col-sm-9">
                         <h6>Cantidad de clientes</h6>
@@ -25,7 +25,7 @@
     </div>
     <div class="col-xl-3 col-md-6">
         <div class="card bg-warning text-white mb-4">
-            <div class="card-body">
+            <div class="card-body" id="ventas">
                 <div class="row">
                     <div class="col-sm-9">
                         <h6>Cantidad de ventas</h6>
@@ -40,7 +40,7 @@
     </div>
     <div class="col-xl-4 col-md-6">
         <div class="card bg-secondary text-white mb-4">
-            <div class="card-body">
+            <div class="card-body" id="productos">
                 <div class="row">
                     <div class="col-sm-9">
                         <h6>Cantidad de productos</h6>
@@ -142,11 +142,34 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
+                $("#clientes").LoadingOverlay("hide");
+                $("#ventas").LoadingOverlay("hide");
+                $("#productos").LoadingOverlay("hide");
                 var dashboard = data.result
 
                 $("#totalClientes").text(dashboard.CantidadClientes);
                 $("#totalVentas").text(dashboard.CantidadVentas);
                 $("#totalProductos").text(dashboard.CantidadProductos);
+            },
+            beforeSend: function () {
+                $("#clientes").LoadingOverlay("show", {
+                    background: "#AED6F1",
+                    imageResizeFactor: 2,
+                    text: "Cargando...",
+                    size: 14
+                })
+                $("#ventas").LoadingOverlay("show", {
+                    background: "#AED6F1",
+                    imageResizeFactor: 2,
+                    text: "Cargando...",
+                    size: 14
+                })
+                $("#productos").LoadingOverlay("show", {
+                    background: "#AED6F1",
+                    imageResizeFactor: 2,
+                    text: "Cargando...",
+                    size: 14
+                })
             }
         })
 

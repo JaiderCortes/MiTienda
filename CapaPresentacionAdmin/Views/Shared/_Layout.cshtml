@@ -83,8 +83,17 @@
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    Start Bootstrap
+                    @{
+                        string usuario = Session["Usuario"] as string;
+                    }
+                    @if (!string.IsNullOrEmpty(usuario))
+                    {
+                        <div class="small">Bienvenido: @usuario</div>
+                    }
+                    else
+                    {
+                        <div class="small">Bienvenido: Usuario</div>
+                    }
                 </div>
             </nav>
         </div>

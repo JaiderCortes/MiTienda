@@ -122,7 +122,7 @@ namespace CapaPresentacionAdmin.Controllers
             bool respuesta = new CNUsuarios().ReestablecerClave(usuario.Id, correo, out mensaje);
             if (respuesta)
             {
-                TempData["Respuesta"] = "Se acaba de enviar su nueva contraseña de acceso al correo indicado. Puede iniciar sesión nuevamente con esta.";
+                TempData["Respuesta"] = "Se acaba de enviar su nueva contraseña de acceso al correo registrado. Puede iniciar sesión nuevamente con esta.";
                 return RedirectToAction("Index");
             }
             else
@@ -135,7 +135,8 @@ namespace CapaPresentacionAdmin.Controllers
         public ActionResult CerrarSesion()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index");
+            return Json(new { success = true, redirectUrl = Url.Action("Index") }, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("Index");
         }
     }
 }

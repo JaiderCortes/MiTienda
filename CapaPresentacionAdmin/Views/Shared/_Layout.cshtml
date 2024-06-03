@@ -44,11 +44,20 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Correo electrónico</a></li>
+                    <li>
+                        <a class="dropdown-item" href="@Url.Action("Usuarios", "Home")">
+                            <i class="fas fa-id-card"></i> Mi perfil
+                        </a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar sesión</a></li>
+                    <li>@*<a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar sesión</a>*@</li>
+                    <li>
+                        <a class="dropdown-item" onclick="CerrarSesion()" style="cursor: pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -79,6 +88,15 @@
                         <a class="nav-link" href="@Url.Action("Productos", "Gestion")">
                             <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
                             Productos
+                        </a>
+                        <div class="sb-sidenav-menu-heading">General</div>
+                        <a class="nav-link" href="@Url.Action("Perfil", "Home")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-id-card"></i></div>
+                            Mi perfil
+                        </a>
+                        <a class="nav-link" onclick="CerrarSesion()" style="cursor: pointer;">
+                            <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                            Cerrar sesión
                         </a>
                     </div>
                 </div>
@@ -115,6 +133,33 @@
             </footer>
         </div>
     </div>
+    <script>
+        function CerrarSesion() {
+            swal({
+                title: "¿Confirma que desea cerrar sesión?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonClass: "btn-info",
+                confirmButtonText: "Cerrar sesión",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+                function (isConfirm) {
+                if (isConfirm) {
+                    jQuery.ajax({
+                        url: '@Url.Action("CerrarSesion", "Acceso")',
+                        type: 'POST',
+                        success: function (response) {
+                            if (response.success) {
+                                window.location.href = response.redirectUrl;
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    </script>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/complementos")

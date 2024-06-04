@@ -105,7 +105,7 @@ namespace CapaNegocio
             if (resultado)
             {
                 //Envío del correo con la nueva contraseña del usuario
-                string asunto = "Reestablecimiento de contraseña - Mi Tienda";
+                string asunto = "Reestablecimiento de contraseña usuarios - Mi Tienda";
                 string mensaje = "<h3>Usted acaba de recibir este correo porque ha solicitado el reestablecimiento de su contraseña.</h3><br>" +
                     "<p>A continuación enviamos su nueva contraseña para acceder al sistema.</p><br>" +
                     $"<h4>Nueva contraseña: {nuevaClave}</h4>";

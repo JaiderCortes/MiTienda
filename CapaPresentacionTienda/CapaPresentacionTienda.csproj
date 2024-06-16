@@ -235,11 +235,14 @@
     <Content Include="webfonts\fa-brands-400.woff" />
     <Content Include="webfonts\fa-brands-400.ttf" />
     <Content Include="webfonts\fa-brands-400.eot" />
+    <Content Include="Views\Acceso\Index.cshtml" />
+    <Content Include="Views\Acceso\Registro.cshtml" />
+    <Content Include="Views\Acceso\ReestablecerClave.cshtml" />
+    <Content Include="Views\Acceso\CambiarClave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Acceso\" />
     <Folder Include="Views\Tienda\" />
   </ItemGroup>
   <ItemGroup>

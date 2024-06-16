@@ -54,6 +54,7 @@ namespace CapaPresentacionTienda.Controllers
                 if (result != null)
                 {
                     ViewBag.Error = null;
+                    TempData["Registro"] = "¡Bienvenido! El registro fue exitoso, ya puedes iniciar sesión y empezar a comprar. 😌";
                     return RedirectToAction("Index", "Acceso");
                 }
                 else
@@ -78,7 +79,8 @@ namespace CapaPresentacionTienda.Controllers
             {
                 if (cliente.Reestablecer)
                 {
-                    TempData["Id"] = cliente.Id;
+                    TempData["NombreCliente"] = cliente.Nombres + " " + cliente.Apellidos;
+                    TempData["IdCliente"] = cliente.Id;
                     return RedirectToAction("CambiarClave", "Acceso");
                 }
                 else
@@ -125,7 +127,7 @@ namespace CapaPresentacionTienda.Controllers
             {
                 TempData["IdCliente"] = idCliente;
                 TempData["NombreCliente"] = cliente.Nombres + " " + cliente.Apellidos;
-                TempData["ClaveActual"] = "";
+                ViewData["ClaveActual"] = "";
                 ViewBag.Error = "La contraseña actual no es correcta.";
                 return View();
             }
@@ -133,7 +135,7 @@ namespace CapaPresentacionTienda.Controllers
             {
                 TempData["IdCliente"] = idCliente;
                 TempData["NombreCliente"] = cliente.Nombres + " " + cliente.Apellidos;
-                TempData["ClaveActual"] = claveActual;
+                ViewData["ClaveActual"] = claveActual;
                 ViewBag.Error = "Las contraseñas no coinciden.";
                 return View();
             }

@@ -162,6 +162,7 @@ namespace CapaPresentacionTienda.Controllers
 
         public ActionResult CerrarSesion()
         {
+            Session["Cliente"] = null;
             FormsAuthentication.SignOut();
             return Json(new { success = true, redirectUrl = Url.Action("Index") }, JsonRequestBehavior.AllowGet);
         }

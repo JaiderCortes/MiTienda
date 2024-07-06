@@ -134,6 +134,7 @@ namespace CapaPresentacionAdmin.Controllers
 
         public ActionResult CerrarSesion()
         {
+            Session["Usuario"] = null;
             FormsAuthentication.SignOut();
             return Json(new { success = true, redirectUrl = Url.Action("Index") }, JsonRequestBehavior.AllowGet);
             //return RedirectToAction("Index");
